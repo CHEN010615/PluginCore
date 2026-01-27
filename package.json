@@ -1,0 +1,37 @@
+{
+  "name": "plugin_core",
+  "author": "chenjiayi",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "set NODE_ENV=development&& set VITE_PORT=8100&& npm run dev",
+    "dev": "concurrently -k \"npm run vite\" \"npm run electron\"",
+    "vite": "vite --config build/vite.config.js",
+    "electron": "wait-on tcp:8100 && nodemon --exec electron .",
+    "build": "set NODE_ENV=production&& npm run build:server",
+    "build:server": "npm run build:vite && npm run build:electron",
+    "build:vite": "vite build --config build/vite.config.js",
+    "build:electron": "set NODE_ENV=production&& electron-builder install-app-deps && electron-builder --config build/electron-builder.json --win"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "open": "^11.0.0",
+    "serve-static": "^2.2.1",
+    "vue": "^3.5.26"
+  },
+  "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.7",
+    "electron-builder": "^23.0.6",
+    "element-plus": "^2.13.0",
+    "less": "^4.5.1",
+    "less-loader": "^12.3.0",
+    "nodemon": "^3.1.11",
+    "vite": "^7.3.0",
+    "wait-on": "^9.0.3"
+  }
+}

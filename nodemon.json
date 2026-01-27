@@ -1,0 +1,4 @@
+{
+  "watch": ["electron", "vite"],
+  "ignore": ["node_modules"]
+}

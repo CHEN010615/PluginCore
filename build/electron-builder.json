@@ -1,0 +1,41 @@
+{
+  "appId": "chen.pluginCore",
+  "productName": "PluginCore",
+  "copyright": "©2026 ChenJY All Rights Reserved.",
+  "directories": {
+    "output": "dist/electron"
+  },
+  "win": {
+    "icon": "./assets/application.png",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "ia32"
+        ]
+      }
+    ]
+  },
+  "mac": {
+    "category": "public.app-category.utilities"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    "installerIcon": "./assets/installer.ico",
+    "installerHeaderIcon": "./assets/installer.ico",
+    "uninstallerIcon": "./assets/uninstaller.ico",
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": false,
+    "shortcutName": "PluginCore",
+    "runAfterFinish": false
+  },
+  "files": [
+    "dist/vite/**/*",
+    "electron/**/*"
+  ],
+  "asar": true,
+  "extraResources": [],
+  "afterPack": "./build/after-pack.js"
+}
