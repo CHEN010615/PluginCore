@@ -1,6 +1,6 @@
 {
-  "appId": "chen.pluginCore",
-  "productName": "PluginCore",
+  "appId": "chen.imageTransformer",
+  "productName": "ImageTransformer",
   "copyright": "©2026 ChenJY All Rights Reserved.",
   "directories": {
     "output": "dist/electron"
@@ -34,7 +34,7 @@
     "uninstallerIcon": "./assets/uninstaller.ico",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": false,
-    "shortcutName": "PluginCore",
+    "shortcutName": "ImageTransformer",
     "runAfterFinish": false
   },
   "files": [

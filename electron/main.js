@@ -154,7 +154,7 @@ class ElectronServer {
       }
     }]);
 
-    this.tray.setToolTip('PluginCore');
+    this.tray.setToolTip('ImageTransformer');
     this.tray.setContextMenu(contextMenu);
 
     this.tray.on('double-click', () => {
