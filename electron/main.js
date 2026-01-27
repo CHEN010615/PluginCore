@@ -36,6 +36,8 @@ class ElectronServer {
     this.tray = null;
     // 是否正在退出程序
     this.isQuiting = false;
+    // 是否允许隐藏到托盘（macOS 上通常不使用这个功能）
+    this.allowTrayMinimize = process.platform === 'win32' || process.platform === 'linux';
   }
   /* 开启服务 */
   start() {
@@ -55,9 +57,7 @@ class ElectronServer {
         this.createMainWnd();
       }
     }).on("window-all-closed", () => {
-      if (process.platform !== "darwin") {
-        app.quit();
-      }
+      app.quit();
     });
   }
   /* 创建主窗口 */
@@ -88,16 +88,49 @@ class ElectronServer {
       this.mainWnd.webContents.send("api-list", apiList);
     });
     // 初始化最小化图标
-    this.createTray();
-    // 关闭弹窗前需要执行的操作
+    this.allowTrayMinimize && this.createTray();
+    // 关闭窗口事件处理
+    this.setupCloseHandler();
+  }
+  /* 设置窗口关闭处理器 */
+  setupCloseHandler() {
     this.mainWnd.on('close', async (e) => {
-      if (!this.isQuiting) {
-        e.preventDefault();
-        this.mainWnd.hide();
+      // 如果是 macOS 或者用户明确要退出，则直接关闭
+      if (this.isQuiting || process.platform === 'darwin' || !this.allowTrayMinimize) {
+        // 允许关闭，执行清理操作
+        await api.destroy();
+        if (this.tray) {
+          this.tray.destroy();
+        }
+        // 确保应用退出
+        if (this.isQuiting) {
+          app.quit();
+        }
         return;
       }
-      await api.destroy();
+      
+      // 其他平台（Windows/Linux）且不是真正退出时，隐藏到托盘
+      e.preventDefault();
+      this.mainWnd.hide();
+      
+      // 显示通知（可选）
+      if (this.tray) {
+        this.tray.displayBalloon({
+          title: "应用已最小化到托盘",
+          content: "双击托盘图标或右键选择'显示窗口'来恢复",
+          iconType: 'info'
+        });
+      }
     });
+    
+    // macOS 特殊处理：点击 Dock 图标时恢复窗口
+    if (process.platform === 'darwin') {
+      app.on('activate', () => {
+        if (this.mainWnd) {
+          this.showMainWnd();
+        }
+      });
+    }
   }
   /* 创建最小化图标 */
   createTray() {
@@ -141,7 +174,7 @@ class ElectronServer {
       }
       window.destroy();
     });
-    this.tray.destroy();
+    this.tray?.destroy();
     app.quit();
   }
   showMainWnd() {

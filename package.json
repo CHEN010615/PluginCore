@@ -7,13 +7,17 @@
   "main": "electron/main.js",
   "scripts": {
     "start": "set NODE_ENV=development&& set VITE_PORT=8100&& npm run dev",
+    "start:mac": "export NODE_ENV=development&& export VITE_PORT=8100&& npm run dev",
     "dev": "concurrently -k \"npm run vite\" \"npm run electron\"",
     "vite": "vite --config build/vite.config.js",
     "electron": "wait-on tcp:8100 && nodemon --exec electron .",
     "build": "set NODE_ENV=production&& npm run build:server",
+    "build:mac": "export NODE_ENV=production&& npm run build:server:mac",
     "build:server": "npm run build:vite && npm run build:electron",
+    "build:server:mac": "npm run build:vite && npm run build:electron:mac",
     "build:vite": "vite build --config build/vite.config.js",
-    "build:electron": "set NODE_ENV=production&& electron-builder install-app-deps && electron-builder --config build/electron-builder.json --win"
+    "build:electron": "set NODE_ENV=production&& electron-builder install-app-deps && electron-builder --config build/electron-builder.json --win",
+    "build:electron:mac": "export NODE_ENV=production&& electron-builder install-app-deps && electron-builder --config build/electron-builder.json --mac"
   },
   "dependencies": {
     "express": "^5.2.1",

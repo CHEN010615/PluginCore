@@ -17,7 +17,13 @@
     ]
   },
   "mac": {
-    "category": "public.app-category.utilities"
+    "category": "public.app-category.utilities",
+    "icon": "./assets/application-mac.png",
+    "target": ["dmg", "zip"],
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist"
   },
   "nsis": {
     "oneClick": false,

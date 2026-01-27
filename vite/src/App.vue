@@ -1,7 +1,6 @@
 <template>
   <div class="index" v-index-directive>
     <el-config-provider :locale="zhCn">
-      <ImageTransform></ImageTransform>
       <!-- <el-scrollbar view-class="server-scroll" v-if="inited">
         
       </el-scrollbar> -->
