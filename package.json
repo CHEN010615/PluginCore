@@ -21,8 +21,13 @@
   },
   "dependencies": {
     "express": "^5.2.1",
+    "http-proxy-middleware": "^3.0.5",
+    "lokijs": "^1.5.12",
     "open": "^11.0.0",
-    "vue": "^3.5.26"
+    "serve-static": "^2.2.1",
+    "uuid": "^13.0.0",
+    "vue": "^3.5.26",
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.2",

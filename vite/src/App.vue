@@ -1,9 +1,9 @@
 <template>
   <div class="index" v-index-directive>
     <el-config-provider :locale="zhCn">
-      <!-- <el-scrollbar view-class="server-scroll" v-if="inited">
-        
-      </el-scrollbar> -->
+      <el-scrollbar view-class="server-scroll" v-if="inited">
+        <Index class="index-container"></Index>
+      </el-scrollbar>
     </el-config-provider>
   </div>
 </template>
@@ -11,6 +11,8 @@
 <script setup>
   import { ref } from 'vue'
   import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+
+  import Index from '@/view/Index.vue'
 
   let inited = ref(false);
 

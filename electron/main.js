@@ -8,7 +8,7 @@ import Common from './common/common.js'
 const Port = process.env.VITE_PORT;
 const PLAY = false;
 
-const api = new API();
+let api
 const apiList = Object.getOwnPropertyNames(API.prototype);
 
 class ElectronServer {
@@ -42,7 +42,12 @@ class ElectronServer {
   /* 开启服务 */
   start() {
     app.whenReady().then(() => {
+      // 初始化数据库
+      return Database.init(app);
+    }).then(() => {
       try {
+        Common.init(Database);
+        api = new API();
         // 初始化窗口
         this.createMenu();
         this.setLisener();
@@ -82,13 +87,13 @@ class ElectronServer {
       !PLAY && this.openDevTools();
     } else {
       this.mainWnd.loadFile(path.join(Common.dirname, '../dist/vite/index.html'));
+      // 初始化最小化图标
+      this.allowTrayMinimize && this.createTray();
     }
     // 向渲染进程传递API数据
     this.mainWnd.webContents.on("did-finish-load", () => {
       this.mainWnd.webContents.send("api-list", apiList);
     });
-    // 初始化最小化图标
-    this.allowTrayMinimize && this.createTray();
     // 关闭窗口事件处理
     this.setupCloseHandler();
   }
@@ -154,7 +159,7 @@ class ElectronServer {
       }
     }]);
 
-    this.tray.setToolTip('PluginCore');
+    this.tray.setToolTip('ProxyServer');
     this.tray.setContextMenu(contextMenu);
 
     this.tray.on('double-click', () => {
@@ -172,6 +177,7 @@ class ElectronServer {
       if (window.isDestroyed()) {
         return;
       }
+      window.hide();
       window.destroy();
     });
     this.tray?.destroy();
@@ -206,7 +212,10 @@ class ElectronServer {
   setLisener() {
     apiList.forEach(key => {
       ipcMain.handle(key, (e, arg) => {
-        return API.prototype[key].call(api, ...[arg]).then(data => {
+        return API.prototype[key].call(api, arg).then(data => {
+          if (data instanceof Promise) {
+            return Utils.resolvePromise({ status: "ok" });
+          }
           return Utils.resolvePromise({ status: "ok", data });
         }).catch(error => {
           return Utils.resolvePromise({ status: "error", error });
