@@ -22,7 +22,6 @@
   "dependencies": {
     "express": "^5.2.1",
     "open": "^11.0.0",
-    "serve-static": "^2.2.1",
     "vue": "^3.5.26"
   },
   "devDependencies": {
