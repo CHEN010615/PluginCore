@@ -16,7 +16,7 @@ if (platform === 'win32') {
 }
 
 try {
-  execSync(`cross-env NODE_ENV=production&& electron-builder install-app-deps && electron-builder --config build/electron-builder.json ${platformFlag}`, { stdio: 'inherit' });
+  execSync(`cross-env NODE_ENV=production electron-builder --config build/electron-builder.json ${platformFlag}`, { stdio: 'inherit' });
 } catch (error) {
   console.error('Build failed:', error);
   process.exit(1);
