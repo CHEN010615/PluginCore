@@ -1,18 +1,18 @@
 <template>
   <div class="animation-wrapper">
     <transition 
-      v-for="slotName in slotNames" 
+      v-for="(slotName, index) in slotNames" 
       :key="slotName"
       :name="transitionName"
       mode="out-in"
     >
-      <slot :name="slotName" />
+      <slot :name="slotName" v-if="index === step" />
     </transition>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch, ref } from 'vue'
 
 const props = defineProps({
   // 简化参数，保持易用性
@@ -20,9 +20,9 @@ const props = defineProps({
     type: Number,
     default: 3
   },
-  reverse: {
-    type: Boolean,
-    default: false
+  step: {
+    type: Number,
+    default: 0
   },
   direction: {
     type: String,
@@ -31,13 +31,19 @@ const props = defineProps({
   }
 })
 
+const reverse = ref(false)
+
+watch(() => props.step, (to, from) => {
+  reverse.value = from > to;
+})
+
 // 计算属性
 const slotNames = computed(() => 
   Array.from({ length: props.slots }, (_, i) => `slot${i + 1}`)
 )
 
 const transitionName = computed(() => 
-  `${props.direction}-${props.reverse ? 'prev' : 'next'}`
+  `${props.direction}-${reverse.value ? 'prev' : 'next'}`
 )
 </script>
 
