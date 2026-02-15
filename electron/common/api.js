@@ -1,7 +1,5 @@
 import Utils from './utils.js'
-import Common from './common.js'
 import { ToolList } from '../data/ToolList.js'
-import { imageTransform } from '../tool/ImageTranform.js'
 
 export default class API {
   constructor() {
@@ -11,12 +9,20 @@ export default class API {
   getToolList() {
     return ToolList;
   }
+  // 选择文件
+  chooseFile(multiple = false) {
+    return Utils.chooseFile(multiple);
+  }
   // 选择目录
   chooseDir() {
     return Utils.chooseDir();
   }
   // 图片转换
   imageTransform(options) {
-    return imageTransform(options);
+    return Utils.multiCompressImg(options);
+  }
+  // 读取目录下的所有文件
+  readAllFiles(dirPath) {
+    return Utils.resolvePromise(Utils.readAllFiles(dirPath, ['jpg', 'jpeg', 'png', 'gif']));
   }
 }
