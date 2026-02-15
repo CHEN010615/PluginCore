@@ -2,16 +2,12 @@
   <div class="index" v-index-directive>
     <el-config-provider :locale="zhCn">
       <ImageTransform></ImageTransform>
-      <!-- <el-scrollbar view-class="server-scroll" v-if="inited">
-        
-      </el-scrollbar> -->
     </el-config-provider>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue'
-  // import ToolList from '@/view/ToolList.vue'
   import ImageTransform from '@/view/ImageTransform.vue'
   import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
