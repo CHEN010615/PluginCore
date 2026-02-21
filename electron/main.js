@@ -37,7 +37,7 @@ class ElectronServer {
     // 是否正在退出程序
     this.isQuiting = false;
     // 是否允许隐藏到托盘（macOS 上通常不使用这个功能）
-    this.allowTrayMinimize = process.platform === 'win32' || process.platform === 'linux';
+    this.allowTrayMinimize = !Common.dev && !Common.mac;
   }
   /* 开启服务 */
   start() {

@@ -2,9 +2,9 @@ import fs from 'fs'
 import { dialog } from 'electron'
 import { exec } from 'child_process'
 import net from 'net'
-import open from 'open'
 import path from 'path'
 
+import Common from './common.js'
 import ImageTransform from '../tool/ImageTranform.js'
 
 class Utils {
@@ -69,8 +69,10 @@ class Utils {
     const aPro = [];
     // 读取所有文件
     const allFiles = !multiple ? [targetPath] : this.readAllFiles(targetPath, accept);
+    // 转换目标路径为当前系统的路径分隔符
+    targetPath = Common.transformPath(targetPath);
     // 计算相对于目标路径的相对路径，单文件时直接使用文件名
-    targetPath = multiple ? targetPath : targetPath.split('/').slice(0, -1).join('/');
+    targetPath = multiple ? targetPath : targetPath.split(Common.defaultPathSeparator).slice(0, -1).join(Common.defaultPathSeparator);
     // 遍历所有文件，进行压缩
     allFiles.forEach(filePath => {
       aPro.push(ImageTransform.imgCompress({ targetPath, filePath, outputPath, fileSize }));
@@ -152,9 +154,6 @@ class Utils {
         resolve(stdout.toString().trim());
       });
     });
-  }
-  openPage(url) {
-    return open(url, { app: 'chrome' });
   }
   resolvePromise(params) {
     return new Promise(resolve => resolve(params));

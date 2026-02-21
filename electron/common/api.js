@@ -1,5 +1,6 @@
 import Utils from './utils.js'
 import { ToolList } from '../data/ToolList.js'
+import Common from './common.js'
 
 export default class API {
   constructor() {
@@ -24,5 +25,9 @@ export default class API {
   // 读取目录下的所有文件
   readAllFiles(dirPath) {
     return Utils.resolvePromise(Utils.readAllFiles(dirPath, ['jpg', 'jpeg', 'png', 'gif']));
+  }
+  // 获取当前系统的默认路径分隔符
+  getDefaultPathSeparator() {
+    return Utils.resolvePromise(Common.defaultPathSeparator);
   }
 }

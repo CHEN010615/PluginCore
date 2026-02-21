@@ -14,7 +14,7 @@
   </el-form>
 </template>
 <script setup>
-import { reactive, toRaw } from 'vue'
+import { reactive, toRaw, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus';
 
 const props = defineProps({
@@ -24,9 +24,11 @@ const props = defineProps({
   }
 })
 
+const defaultSeparator = ref('/');
+
 const getDefaultOutputPath = () => {
   const { targetPath = '' } = JSON.parse(sessionStorage.getItem('basicForm') || '{}');
-  const defaultPath = `${targetPath.split('/').slice(0, -1).join('/')}/output`;
+  const defaultPath = `${targetPath.split(defaultSeparator.value).slice(0, -1).join(defaultSeparator.value)}${defaultSeparator.value}output`;
   return defaultPath;
 }
 
@@ -35,6 +37,13 @@ const settingForm = reactive(Object.keys(props.data).length ? props.data : {
   sizeUnite: 'kb',
   outputPath: getDefaultOutputPath()
 })
+
+onMounted(async () => {
+  const defaultPathSeparator = await PluginServer.getDefaultPathSeparator();
+  defaultSeparator.value = defaultPathSeparator;
+  // 如果没有传入数据，默认输出路径设置为目标路径同级的 output 文件夹
+  settingForm.outputPath = getDefaultOutputPath();
+});
 
 const chooseDir = () => {
   window.PluginServer.chooseDir().then(filePath => {

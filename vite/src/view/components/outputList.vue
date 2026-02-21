@@ -27,15 +27,16 @@
 
   const tableData = reactive([]);
 
-  onMounted(() => {
+  onMounted(async () => {
     // 从 basicForm 组件获取目标路径，计算根路径并获取文件列表
     const { targetPath = "" } = JSON.parse(sessionStorage.getItem('basicForm') || "{}");
     // 如果没有目标路径，直接返回
     if (!targetPath) {
       return;
     }
+    const defaultPathSeparator = await PluginServer.getDefaultPathSeparator();
     // 计算根路径，获取文件列表
-    const rootPath = `${targetPath.split('/').slice(0, -1).join('/')}/`;
+    const rootPath = `${targetPath.split(defaultPathSeparator).slice(0, -1).join(defaultPathSeparator)}${defaultPathSeparator}`;
     // 获取文件列表并初始化表格数据
     PluginServer.readAllFiles(targetPath).then(fileList => {
       fileList.forEach(file => {
