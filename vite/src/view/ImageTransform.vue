@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <el-steps :active="active" finish-status="success" simple>
-      <el-step v-for="item in stepList" :title="item.title" :icon="item.icon" />
+      <el-step v-for="item in stepList" :key="item.title" :title="item.title" :icon="item.icon" />
     </el-steps>
     <div class="main-content">
       <MyTransition :slots="stepTotal" :step="active">
-        <template v-for="(item, index) in stepComponents" v-slot:[getSlotName(index)]>
+        <template v-for="(item, index) in stepComponents" :key="item.name" v-slot:[getSlotName(index)]>
           <component
             :is="item.component"
             :ref="el => setRef(el, index)"
@@ -40,7 +40,7 @@
   import { ref, computed } from 'vue'
 
   import { ArrowLeft, ArrowRight, FolderAdd, Picture, Setting } from '@element-plus/icons-vue';
-  import { ElLoading } from 'element-plus'
+  import { ElLoading, ElNotification } from 'element-plus'
 
   import BasicForm from './components/basicForm.vue';
   import SettingForm from './components/settingForm.vue';
@@ -108,6 +108,33 @@
     return JSON.parse(sessionStorage.getItem(name) || '{}');
   }
 
+  const transformTime = (date1, date2) => {
+    // 计算毫秒差，并取绝对值以确保结果为正
+    let diffInMs = Math.abs(date2 - date1);
+
+    // 计算总秒数
+    const totalSeconds = Math.floor(diffInMs / 1000);
+
+    // 计算小时：1小时 = 3600秒
+    const hours = Math.floor(totalSeconds / 3600);
+    // 计算剩余分钟：1分钟 = 60秒
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    // 计算剩余秒数
+    const seconds = totalSeconds % 60;
+
+    // 格式化输出，补零到两位
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+
+    let str = hours > 0 ? `${formattedHours}小时` : '';
+    str += minutes > 0 ? `${formattedMinutes}分` : '';
+    str += seconds > 0 ? `${formattedSeconds}秒` : '';
+    return str;
+  }
+
+  let notification = null;
+
   const confirm = async () => {
     let options = {};
     steps.forEach(item => {
@@ -117,15 +144,30 @@
       };
       sessionStorage.removeItem(item.name);
     })
-    const loading = ElLoading.service({ fullscreen: true })
+    const loading = ElLoading.service({ fullscreen: true, text: '图片压缩中...' })
+    //
+    const startTime = new Date();
     const result = await PluginServer.imageTransform(options);
+    const endTime = new Date();
+    //
     const currentComponent = conponentRefs[active.value];
     currentComponent.updateTable(result);
     loading.close();
     bFinish.value = true;
+
+    //
+    notification = ElNotification({
+      title: '压缩完成',
+      message: `总计消耗${transformTime(startTime, endTime)}`,
+      duration: 0,
+      type: 'info',
+      position: 'bottom-left'
+    });
   }
 
   const reset = () => {
+    notification?.close();
+    notification = null;
     active.value = 0;
     bFinish.value = false;
   }

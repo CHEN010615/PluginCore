@@ -16,7 +16,7 @@ class Common {
    * @returns {string} 转换后的路径
    */
   transformPath(path) {
-    const oReg = new RegExp(this.defaultPathSeparator, 'g');
+    const oReg = new RegExp(this.mac ? '\\\\' : '/', 'g');
     return path.replace(oReg, this.mac ? '/' : '\\');
   }
 
