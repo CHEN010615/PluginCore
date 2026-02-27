@@ -9,6 +9,7 @@
 {
     "build": {
         "assets": "打包静态资源",
+        "before-pack.js": "打包前执行文件，用于更新指定版本sharp依赖",
         "after-pack.js": "打包后执行文件，用于裁剪electron打包后内容（多语言等）",
         "electron-builder.json": "electron-builder 配置文件",
         "vite.config.js": "vite 配置文件"
@@ -29,7 +30,7 @@
 
 | 操作系统 |   版本    |
 | :------: | :-------: |
-| Windows  | `21.0.0`  |
+| Windows  | `23.0.0`  |
 |  MacOS   | `22.12.0` |
 
 
@@ -52,7 +53,15 @@
 
 #### 打包
 
-- **electron-builder**
+- `sharp`
+
+  需要根据目标环境下载指定版本（`build/before-pack.js`）
+
+  ```shell
+  npm install sharp --platform="process.env.PLATFORM" --arch="process.env.ARCH"
+  ```
+  
+- electron-builder
 
   [配置文档1](https://blog.csdn.net/liyu_ya/article/details/135282663)
 

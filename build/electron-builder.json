@@ -11,7 +11,8 @@
       {
         "target": "nsis",
         "arch": [
-          "ia32"
+          "ia32",
+          "x64"
         ]
       }
     ]
@@ -23,7 +24,13 @@
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.plist"
+    "entitlementsInherit": "build/entitlements.mac.plist",
+    "extraFiles": [
+      {
+        "from": "node_modules/sharp/vendor",
+        "to": "app.asar.unpacked/node_modules/sharp/vendor"
+      }
+    ]
   },
   "nsis": {
     "oneClick": false,
@@ -42,6 +49,12 @@
     "electron/**/*"
   ],
   "asar": true,
+  "asarUnpack": [
+    "node_modules/sharp/**/*",
+    "node_modules/@img/**/*"
+  ],
+  "npmRebuild": true,
+  "buildDependenciesFromSource": true,
   "extraResources": [],
   "afterPack": "./build/after-pack.js"
 }
