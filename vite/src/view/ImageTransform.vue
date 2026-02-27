@@ -121,15 +121,19 @@
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     // 计算剩余秒数
     const seconds = totalSeconds % 60;
+    // 计算剩余毫秒数
+    const milliseconds = diffInMs % 1000;
 
     // 格式化输出，补零到两位
     const formattedHours = String(hours).padStart(2, '0');
     const formattedMinutes = String(minutes).padStart(2, '0');
     const formattedSeconds = String(seconds).padStart(2, '0');
+    const formattedMilliSeconds = String(milliseconds).padStart(3, '0');
 
     let str = hours > 0 ? `${formattedHours}小时` : '';
     str += minutes > 0 ? `${formattedMinutes}分` : '';
     str += seconds > 0 ? `${formattedSeconds}秒` : '';
+    str += milliseconds > 0 ? `${formattedMilliSeconds}毫秒` : '';
     return str;
   }
 
