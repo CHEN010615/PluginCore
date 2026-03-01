@@ -10,6 +10,8 @@
     "build": {
         "assets": "打包静态资源",
         "after-pack.js": "打包后执行文件，用于裁剪electron打包后内容（多语言等）",
+        "entitlements.mac.plist": "mac主应用权限配置文件",
+        "entitlements.mac.inherit.plist": "mac子进程继承权限配置文件",
         "electron-builder.json": "electron-builder 配置文件",
         "vite.config.js": "vite 配置文件"
     },
@@ -29,7 +31,7 @@
 
 | 操作系统 |   版本    |
 | :------: | :-------: |
-| Windows  | `21.0.0`  |
+| Windows  | `23.0.0`  |
 |  MacOS   | `22.12.0` |
 
 
