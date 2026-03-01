@@ -1,0 +1,3 @@
+[submodule "vite/src/common/components"]
+	path = vite/src/common/components
+	url = https://github.com/CHEN010615/VueComponents.git
